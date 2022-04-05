@@ -1,5 +1,6 @@
 # Speeko
 **SPEEKO!**
+
 Speeko is a Text to speech tool, Designed as an Assignment!.
 
 Play:
@@ -12,3 +13,5 @@ Pause:
   -> Terminates the reading process, Will restart from the start of the buffer (Still a little buggy!)
 
   **Its still under development, and new bugs are still being resolved, will be done soon IA.**
+
+                                                                    -Submitted to Sir Sheraz!
