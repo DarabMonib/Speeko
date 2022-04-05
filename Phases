@@ -1,0 +1,19 @@
+1st Phase:
+	
+	Create Basic Extension, //Complete!
+	Get it to fetch the data  //Complete
+
+2nd Phase:
+
+	Learn About text to speech,  //Complete
+	Prefebally try finding a web API for it.  //Found Built in TTS
+	
+3rd Phase: 
+
+	Implement it into the code. Try Getting the
+	sound working from top to bottom  //Complete
+	
+4th Phase:
+
+	Add Features, Stop, Play, Select Area to Play //InProgress
+	.....
