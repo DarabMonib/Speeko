@@ -30,6 +30,10 @@ let tSRepeat, pSRepeat;
 
 const msg = new SpeechSynthesisUtterance();
 
+msg.voice = speechSynthesis.getVoices().filter(function(voice) { 
+    return voice.name == 'Google UK English Male'; 
+})[0];
+
 chrome.runtime.onMessage.addListener((message) => {
     
     if(message.press === 'play' && message.selected === undefined){
@@ -59,7 +63,7 @@ chrome.runtime.onMessage.addListener((message) => {
                 }
             }
             
-        }, 1000);
+        }, 10);
         
     }
     
@@ -92,7 +96,7 @@ chrome.runtime.onMessage.addListener((message) => {
                 }
             }
             
-        }, 1000);
+        }, 10);
         
     }
     
@@ -112,7 +116,7 @@ chrome.runtime.onMessage.addListener((message) => {
 function clearAllIntervals() {
 
     let highestInterval = setInterval(() => {}, 0)
-    
+    bufferArray = [];
     for(let range = 0; range <= highestInterval; range++){
         clearInterval(range);
     }
