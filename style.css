@@ -94,3 +94,8 @@
     transition: 0.2s;
 
 }
+
+.flex{
+    display:flex;
+    flex-direction: column;
+}
