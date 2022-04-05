@@ -21,79 +21,111 @@ let virtualInp;
 
 
 let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
-let buff = -1;
-let buffChunkSize = 165;
-let recurr = 500;
 
-let buffs = [];
+let bufferCount = -1;
+let bufferChunkSize = 165;
+let bufferArray = [];
 
-function bufferGenerator(dataType) {
-    
-    buffs = []
-    for(let i = 0; i < dataType.length; i+=buffChunkSize){
-        // if(dataType[i+buffChunkSize]){
-            buff++;
-            buffs[buff] = dataType.slice(i, i+buffChunkSize);
-        // }
-    }
-    buff = -1;
-    return [buffs, buff];
-}
-
-// Jab Jhatke se band hogi to speech synthesis ke true-false bug karenge!.....
+let tSRepeat, pSRepeat;
 
 const msg = new SpeechSynthesisUtterance();
 
 chrome.runtime.onMessage.addListener((message) => {
-
+    
     if(message.press === 'play' && message.selected === undefined){
+    
+        clearAllIntervals();
 
         // Loop Over Each Block of String....
-
-        bufferGenerator(data)
-        recurr = setInterval(() => {
+        
+        let totalSpeaking = bufferGenerator(data)
+        let tSCount = 0;
+        tSRepeat = setInterval(() => {
             
-            if(!speechSynthesis.speaking && buffs[buff+1]){
-             
-                msg.text = buffs[buff+1];
+            if(!speechSynthesis.speaking && totalSpeaking[tSCount]){
+                
+                msg.text = totalSpeaking[tSCount];
                 window.speechSynthesis.cancel();
                 window.speechSynthesis.speak(msg);
-                buff++;
-
+                tSCount++;
+                
+            }
+            else{
+                console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
+                console.log('Total Interval ID => ' + tSRepeat);
+                if(speechSynthesis.speaking === false){
+                    clearInterval(tSRepeat);
+                    console.log("Cleared the Interval " + tSRepeat);
+                }
             }
             
         }, 1000);
         
     }
-
+    
     else if(message.press === 'play' && message.selected == true){
         
-        console.log('I am inside the PLAY SELECTED AREA if statement!')
+        clearAllIntervals();
 
-        bufferGenerator(virtualInp.value)
-        console.log(buffs);
-        recurr = setInterval(() => {
+        let portionSpeaking = bufferGenerator(virtualInp.value)
+        let pSCount = 0;
+
+        console.log(portionSpeaking);
+        
+        pSRepeat = setInterval(() => {
             
-            if(!speechSynthesis.speaking && buffs[buff+1]){
-             
-                msg.text = buffs[buff+1];
+            if(!speechSynthesis.speaking && portionSpeaking[pSCount]){
+                
+                msg.text = portionSpeaking[pSCount];
                 window.speechSynthesis.cancel();
                 window.speechSynthesis.speak(msg);
-                buff++;
-
+                pSCount++;
+                
+            }
+            else{
+                console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
+                console.log('Portion Interval ID => ' + pSRepeat);
+                if(speechSynthesis.speaking === false){
+                    clearInterval(pSRepeat);
+                    console.log("Cleared the Interval " + pSRepeat);
+                    
+                }
             }
             
         }, 1000);
-
+        
     }
-
-    else if(message === 'pause'){
     
+    else if(message === 'pause'){
+        
         window.speechSynthesis.cancel();
-        clearInterval(recurr);
-
+        clearAllIntervals();
     }
-
+    
 })
 
 // Get The Data inside the text field!
+
+// Points to be noted about (Speech Synthesis)
+    // => Jab Jhatke se band hogi to speech synthesis ke true-false bug karenge!.....
+
+function clearAllIntervals() {
+
+    let highestInterval = setInterval(() => {}, 0)
+    
+    for(let range = 0; range <= highestInterval; range++){
+        clearInterval(range);
+    }
+    console.log('Cleared all intervals!!! Starting new speakings!!!')
+
+}
+
+function bufferGenerator(toBuffer) {
+    
+    for(let i = 0; i < toBuffer.length; i+=bufferChunkSize){    
+        bufferCount++;
+        bufferArray[bufferCount] = toBuffer.slice(i, i+bufferChunkSize);
+    }
+    bufferCount = -1;
+    return bufferArray;
+}
