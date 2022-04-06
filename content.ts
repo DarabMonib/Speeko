@@ -1,13 +1,13 @@
-let t = '';
+let textData = '';
 let selectedData = '';
 let virtualInp;
 
     function gText(e) {
     
-        t = (document.all) ? document.selection.createRange().text : document.getSelection();
+        textData = (document.all) ? document.selection.createRange().text : document.getSelection();
                 
         virtualInp = document.createElement('input')
-        virtualInp.value = t;
+        virtualInp.value = textData;
 
         console.log(virtualInp.value);
         console.log('This Portion Right Here!');
@@ -22,17 +22,12 @@ let virtualInp;
 
 let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
 
-let bufferCount = -1;
-let bufferChunkSize = 165;
-let bufferArray = [];
+// let bufferCount = -1;
+// let bufferChunkSize = 185;
+// let bufferArray = [];
 
-let tSRepeat, pSRepeat;
-
-const msg = new SpeechSynthesisUtterance();
-
-msg.voice = speechSynthesis.getVoices().filter(function(voice) { 
-    return voice.name == 'Google UK English Male'; 
-})[0];
+// let tSRepeat, pSRepeat;
+// const msg = new SpeechSynthesisUtterance();
 
 chrome.runtime.onMessage.addListener((message) => {
     
@@ -40,30 +35,34 @@ chrome.runtime.onMessage.addListener((message) => {
     
         clearAllIntervals();
 
-        // Loop Over Each Block of String....
+        BreakLessSpeech(data)
+
+        // // Loop Over Each Block of String....
         
-        let totalSpeaking = bufferGenerator(data)
-        let tSCount = 0;
-        tSRepeat = setInterval(() => {
+        // let totalSpeaking = bufferGenerator(data)
+        // let tSCount = 0;
+        // tSRepeat = setInterval(() => {
             
-            if(!speechSynthesis.speaking && totalSpeaking[tSCount]){
+        //     if(!speechSynthesis.speaking && totalSpeaking[tSCount]){
                 
-                msg.text = totalSpeaking[tSCount];
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(msg);
-                tSCount++;
+        //         msg.text = totalSpeaking[tSCount];
+        //         window.speechSynthesis.cancel();
+        //         window.speechSynthesis.speak(msg);
+        //         tSCount++;
                 
-            }
-            else{
-                console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
-                console.log('Total Interval ID => ' + tSRepeat);
-                if(speechSynthesis.speaking === false){
-                    clearInterval(tSRepeat);
-                    console.log("Cleared the Interval " + tSRepeat);
-                }
-            }
+        //     }
+        //     else{
+        //         console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
+        //         console.log('Total Interval ID => ' + tSRepeat);
+        //         if(speechSynthesis.speaking === false){
+        //             clearInterval(tSRepeat);
+        //             console.log("Cleared the Interval " + tSRepeat);
+        //         }
+        //     }
             
-        }, 10);
+        // }, 10);
+
+
         
     }
     
@@ -71,32 +70,34 @@ chrome.runtime.onMessage.addListener((message) => {
         
         clearAllIntervals();
 
-        let portionSpeaking = bufferGenerator(virtualInp.value)
-        let pSCount = 0;
+        BreakLessSpeech(virtualInp.value)
 
-        console.log(portionSpeaking);
+        // let portionSpeaking = bufferGenerator(virtualInp.value)
+        // let pSCount = 0;
+
+        // console.log(portionSpeaking);
         
-        pSRepeat = setInterval(() => {
+        // pSRepeat = setInterval(() => {
             
-            if(!speechSynthesis.speaking && portionSpeaking[pSCount]){
+        //     if(!speechSynthesis.speaking && portionSpeaking[pSCount]){
                 
-                msg.text = portionSpeaking[pSCount];
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(msg);
-                pSCount++;
+        //         msg.text = portionSpeaking[pSCount];
+        //         window.speechSynthesis.cancel();
+        //         window.speechSynthesis.speak(msg);
+        //         pSCount++;
                 
-            }
-            else{
-                console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
-                console.log('Portion Interval ID => ' + pSRepeat);
-                if(speechSynthesis.speaking === false){
-                    clearInterval(pSRepeat);
-                    console.log("Cleared the Interval " + pSRepeat);
+        //     }
+        //     else{
+        //         console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
+        //         console.log('Portion Interval ID => ' + pSRepeat);
+        //         if(speechSynthesis.speaking === false){
+        //             clearInterval(pSRepeat);
+        //             console.log("Cleared the Interval " + pSRepeat);
                     
-                }
-            }
+        //         }
+        //     }
             
-        }, 10);
+        // }, 10);
         
     }
     
@@ -132,4 +133,23 @@ function bufferGenerator(toBuffer) {
     }
     bufferCount = -1;
     return bufferArray;
+}
+
+function BreakLessSpeech(toSpeak){
+
+    var myTimeout;
+    function myTimer() {
+
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+        myTimeout = setTimeout(myTimer, 10000);
+
+    }
+    window.speechSynthesis.cancel();
+    myTimeout = setTimeout(myTimer, 10000);
+    
+    var utt = new SpeechSynthesisUtterance(toSpeak);
+    utt.onend =  function() { clearTimeout(myTimeout); }
+    window.speechSynthesis.speak(utt);
+
 }
