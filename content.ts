@@ -1,4 +1,5 @@
 let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
+let utt = new SpeechSynthesisUtterance();
 
 let textData = '';
 let selectedData = '';
@@ -20,22 +21,36 @@ let virtualInp;
 
 chrome.runtime.onMessage.addListener((message) => {
     
-    let noBr = data;
-    console.log(typeof noBr)
     if(message.press === 'play' && message.selected === undefined){
         clearAllIntervals();
-        BreakLessSpeech(noBr)
+        BreakLessSpeech(data)
     }
     
     else if(message.press === 'play' && message.selected == true){
         clearAllIntervals();
-        BreakLessSpeech(virtualInp.value)        
+        BreakLessSpeech(virtualInp.value)       
     }
     
     else if(message === 'pause'){
         window.speechSynthesis.cancel();
         clearAllIntervals();
     }
+
+    if(message.pitch){
+        clearAllIntervals();
+        utt.pitch = message.pitch;
+    }
+
+    if(message.rate){
+        clearAllIntervals();
+        utt.rate = message.rate;
+    }
+
+    if(message.volume){
+        clearAllIntervals();
+        utt.volume = message.volume;
+    }
+
     
 })
 
@@ -54,6 +69,9 @@ function clearAllIntervals() {
     console.log('Cleared all intervals!!! Starting new speakings!!!')
 
 }
+
+// Use Buffer Generator, New Logic's Length is ~3990 Chars....
+
 function bufferGenerator(toBuffer) {
     
     for(let i = 0; i < toBuffer.length; i+=bufferChunkSize){    
@@ -76,7 +94,7 @@ function BreakLessSpeech(toSpeak){
     window.speechSynthesis.cancel();
     myTimeout = setTimeout(myTimer, 10000);
     
-    var utt = new SpeechSynthesisUtterance(toSpeak);
+    utt.text = toSpeak;
     utt.onend =  function() { clearTimeout(myTimeout); }
     window.speechSynthesis.speak(utt);
 

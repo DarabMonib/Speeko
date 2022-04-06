@@ -2,7 +2,30 @@ let playbtn = document.querySelector('#play');
 let playSelbtn = document.querySelector('#playSel');
 let pausebtn = document.querySelector('#pause');
 
+// Extension's Dom Manipulation..
+let body = document.querySelector('body');
+let darkMode = document.querySelector('#darkMode');
+
+//Sliders..
+let pitch = document.querySelector('#pitch');
+let rate = document.querySelector('#speed');
+let volume = document.querySelector('#volume');
+
 let message = {}
+
+darkMode.addEventListener("click",() => {
+
+    darkMode.checked ?
+    (body.style.backgroundColor = "black",
+    body.style.color = 'white',
+    body.style.transition = '0.2s') : 
+    (body.style.backgroundColor = "white",
+    body.style.color = 'black',
+    body.style.transition = '0.2s')
+
+})
+
+
 
 chrome.tabs.query({
     active: true,
@@ -15,7 +38,8 @@ chrome.tabs.query({
         message.selected = undefined;
 
         chrome.tabs.sendMessage(tabs[0].id, message)
-        playbtn.style.backgroundColor = 'gray';
+        playbtn.style.backgroundColor = 'rgb(38, 154, 255);';
+        playbtn.style.boxShadow = '0px 0px 0px';
         playSelbtn.style.backgroundColor = 'rgb(38, 154, 255)';
         pausebtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
@@ -27,7 +51,8 @@ chrome.tabs.query({
         message.selected = true;
 
         chrome.tabs.sendMessage(tabs[0].id, message)
-        playSelbtn.style.backgroundColor = 'gray';
+        playSelbtn.style.backgroundColor = 'rgb(38, 154, 255);';
+        playSelbtn.style.boxShadow = '0px 0px 0px';
         playbtn.style.backgroundColor = 'rgb(38, 154, 255)';
         pausebtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
@@ -36,10 +61,30 @@ chrome.tabs.query({
     pausebtn.addEventListener('click', () => {
         
         chrome.tabs.sendMessage(tabs[0].id ,'pause')
-        pausebtn.style.backgroundColor = 'gray';
+        pausebtn.style.backgroundColor = 'rgb(38, 154, 255);';
+        pausebtn.style.boxShadow = '0px 0px 0px';
         playbtn.style.backgroundColor = 'rgb(38, 154, 255)';
         playSelbtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
     })
 
+    //Sliders Listeners...
+    pitch.addEventListener('change', () => {
+        message.pitch = pitch.value
+        chrome.tabs.sendMessage(tabs[0].id, message)
+    })
+
+    rate.addEventListener('change', () => {
+        message.rate = rate.value
+        chrome.tabs.sendMessage(tabs[0].id, message)
+    })
+
+    volume.addEventListener('change', () => {
+        message.volume = volume.value
+        chrome.tabs.sendMessage(tabs[0].id, message)
+    })
+
+
 });
+
+
