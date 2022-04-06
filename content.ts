@@ -1,3 +1,4 @@
+let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
 let textData = '';
 let selectedData = '';
 let virtualInp;
@@ -16,93 +17,19 @@ let virtualInp;
     document.onmouseup = gText;
     if (!document.all) document.captureEvents(Event.MOUSEUP);
 
-
-//-------------------------------------------------------//
-
-
-let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
-
-// let bufferCount = -1;
-// let bufferChunkSize = 185;
-// let bufferArray = [];
-
-// let tSRepeat, pSRepeat;
-// const msg = new SpeechSynthesisUtterance();
-
 chrome.runtime.onMessage.addListener((message) => {
     
     if(message.press === 'play' && message.selected === undefined){
-    
         clearAllIntervals();
-
         BreakLessSpeech(data)
-
-        // // Loop Over Each Block of String....
-        
-        // let totalSpeaking = bufferGenerator(data)
-        // let tSCount = 0;
-        // tSRepeat = setInterval(() => {
-            
-        //     if(!speechSynthesis.speaking && totalSpeaking[tSCount]){
-                
-        //         msg.text = totalSpeaking[tSCount];
-        //         window.speechSynthesis.cancel();
-        //         window.speechSynthesis.speak(msg);
-        //         tSCount++;
-                
-        //     }
-        //     else{
-        //         console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
-        //         console.log('Total Interval ID => ' + tSRepeat);
-        //         if(speechSynthesis.speaking === false){
-        //             clearInterval(tSRepeat);
-        //             console.log("Cleared the Interval " + tSRepeat);
-        //         }
-        //     }
-            
-        // }, 10);
-
-
-        
     }
     
     else if(message.press === 'play' && message.selected == true){
-        
         clearAllIntervals();
-
-        BreakLessSpeech(virtualInp.value)
-
-        // let portionSpeaking = bufferGenerator(virtualInp.value)
-        // let pSCount = 0;
-
-        // console.log(portionSpeaking);
-        
-        // pSRepeat = setInterval(() => {
-            
-        //     if(!speechSynthesis.speaking && portionSpeaking[pSCount]){
-                
-        //         msg.text = portionSpeaking[pSCount];
-        //         window.speechSynthesis.cancel();
-        //         window.speechSynthesis.speak(msg);
-        //         pSCount++;
-                
-        //     }
-        //     else{
-        //         console.log('waiting, Speech Synth Speaking? => ' + speechSynthesis.speaking)
-        //         console.log('Portion Interval ID => ' + pSRepeat);
-        //         if(speechSynthesis.speaking === false){
-        //             clearInterval(pSRepeat);
-        //             console.log("Cleared the Interval " + pSRepeat);
-                    
-        //         }
-        //     }
-            
-        // }, 10);
-        
+        BreakLessSpeech(virtualInp.value)        
     }
     
     else if(message === 'pause'){
-        
         window.speechSynthesis.cancel();
         clearAllIntervals();
     }
