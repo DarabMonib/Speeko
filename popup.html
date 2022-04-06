@@ -8,7 +8,7 @@
     <title>Speeko</title>
 </head>
 
-<body style="background-color: rgb(255, 227, 148);">
+<body style="background-color: rgb(255, 255, 255);">
     
     
     <div id="root">
@@ -22,28 +22,52 @@
         </div>
         
         <div id="container">
+            
+            <div id="play">
+                <img src="images/playX.png" width="30px" height="30px"  class="invert">
+            </div>
 
-        <div class="flex">
-            <button id="play">
-            
-                Play the whole page!
-            
-            </button>
+            <div id="playSel">
+                <img src="images/playSel2X.png" width="30px" height="30px"  class="invert">
+            </div>
 
-            <button id="playSel">
-            
-                Play Selected Area!
-            
-            </button>
-            
-        </div>
-
-            <button id="pause">
-                Pause!
-            </button>
+            <div id="pause">
+                <img src="images/pauseX.png" width="30px" height="30px"  class="invert">
+            </div>
             
         </div>
         
+        <div id="bars">
+
+            <div class="margin">
+                
+                Select Pitch : <br>
+                <input type="range" min="1" max="100" value="50">
+                <br>
+
+            </div>
+
+            <div class="margin">
+
+                Select Speed : <br>
+                <input type="range" min="1" max="100" value="50">
+                <br>
+
+            </div>
+
+            <div class="margin">
+
+                Select Volume : <br>
+                <input type="range" min="1" max="100" value="50">
+                <br>
+
+            </div>
+
+        </div>
+
+        <div class="theme">Dark Mode</div>
+        <input type="checkbox" id="">
+
     </div>
     
     <script src="popup.js"></script>

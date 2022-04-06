@@ -1,4 +1,5 @@
 let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
+
 let textData = '';
 let selectedData = '';
 let virtualInp;
@@ -19,9 +20,11 @@ let virtualInp;
 
 chrome.runtime.onMessage.addListener((message) => {
     
+    let noBr = data;
+    console.log(typeof noBr)
     if(message.press === 'play' && message.selected === undefined){
         clearAllIntervals();
-        BreakLessSpeech(data)
+        BreakLessSpeech(noBr)
     }
     
     else if(message.press === 'play' && message.selected == true){
@@ -51,7 +54,6 @@ function clearAllIntervals() {
     console.log('Cleared all intervals!!! Starting new speakings!!!')
 
 }
-
 function bufferGenerator(toBuffer) {
     
     for(let i = 0; i < toBuffer.length; i+=bufferChunkSize){    
@@ -61,7 +63,6 @@ function bufferGenerator(toBuffer) {
     bufferCount = -1;
     return bufferArray;
 }
-
 function BreakLessSpeech(toSpeak){
 
     var myTimeout;

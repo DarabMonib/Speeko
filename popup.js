@@ -15,7 +15,9 @@ chrome.tabs.query({
         message.selected = undefined;
 
         chrome.tabs.sendMessage(tabs[0].id, message)
-        playbtn.style.backgroundColor = 'red';
+        playbtn.style.backgroundColor = 'gray';
+        playSelbtn.style.backgroundColor = 'rgb(38, 154, 255)';
+        pausebtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
     })
 
@@ -25,15 +27,18 @@ chrome.tabs.query({
         message.selected = true;
 
         chrome.tabs.sendMessage(tabs[0].id, message)
-        playSelbtn.style.backgroundColor = 'red';
+        playSelbtn.style.backgroundColor = 'gray';
+        playbtn.style.backgroundColor = 'rgb(38, 154, 255)';
+        pausebtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
     })
     
     pausebtn.addEventListener('click', () => {
         
         chrome.tabs.sendMessage(tabs[0].id ,'pause')
-        playbtn.style.backgroundColor = 'black';
-        playSelbtn.style.backgroundColor = 'black';
+        pausebtn.style.backgroundColor = 'gray';
+        playbtn.style.backgroundColor = 'rgb(38, 154, 255)';
+        playSelbtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
     })
 

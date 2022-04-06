@@ -20,16 +20,16 @@
     },
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "/images/ico.png",
-      "32": "/images/ico.png",
-      "48": "/images/ico.png",
-      "128": "/images/ico.png"
+      "16": "/images/ico2.png",
+      "32": "/images/ico2.png",
+      "48": "/images/ico2.png",
+      "128": "/images/ico2.png"
     }
   },
   "icons": {
-    "16": "/images/ico.png",
-    "32": "/images/ico.png",
-    "48": "/images/ico.png",
-    "128": "/images/ico.png"
+    "16": "/images/ico2.png",
+    "32": "/images/ico2.png",
+    "48": "/images/ico2.png",
+    "128": "/images/ico2.png"
   }
 }
