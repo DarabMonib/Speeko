@@ -13,20 +13,6 @@ let volume = document.querySelector('#volume');
 
 let message = {}
 
-darkMode.addEventListener("click",() => {
-
-    darkMode.checked ?
-    (body.style.backgroundColor = "black",
-    body.style.color = 'white',
-    body.style.transition = '0.2s') : 
-    (body.style.backgroundColor = "white",
-    body.style.color = 'black',
-    body.style.transition = '0.2s')
-
-})
-
-
-
 chrome.tabs.query({
     active: true,
     lastFocusedWindow: true
@@ -67,6 +53,28 @@ chrome.tabs.query({
         playSelbtn.style.backgroundColor = 'rgb(38, 154, 255)';
 
     })
+
+    //Dark Mode...
+    darkMode.addEventListener("click",() => {
+
+        
+        if(darkMode.checked) {
+            body.style.backgroundColor = "black";
+            body.style.color = 'white';
+            message.dark = true;
+            chrome.tabs.sendMessage(tabs[0].id, message);
+            body.style.transition = '0.2s';
+        }
+        else { 
+            body.style.backgroundColor = "white";
+            message.dark = false;
+            chrome.tabs.sendMessage(tabs[0].id, message);
+            body.style.color = 'black';
+            body.style.transition = '0.2s';
+        }
+        
+    })
+
 
     //Sliders Listeners...
     pitch.addEventListener('change', () => {

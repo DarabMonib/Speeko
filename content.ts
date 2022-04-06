@@ -1,6 +1,8 @@
 let data = document.body.innerText; //To get Body's Text Data, Will not support PDF files tho, Need a better solution for this
 let utt = new SpeechSynthesisUtterance();
 
+let page = document.body;
+
 let textData = '';
 let selectedData = '';
 let virtualInp;
@@ -23,12 +25,12 @@ chrome.runtime.onMessage.addListener((message) => {
     
     if(message.press === 'play' && message.selected === undefined){
         clearAllIntervals();
-        BreakLessSpeech(data)
+        Speak(data)
     }
     
     else if(message.press === 'play' && message.selected == true){
         clearAllIntervals();
-        BreakLessSpeech(virtualInp.value)       
+        Speak(virtualInp.value)
     }
     
     else if(message === 'pause'){
@@ -51,6 +53,21 @@ chrome.runtime.onMessage.addListener((message) => {
         utt.volume = message.volume;
     }
 
+    if(message.dark === true){
+
+        page.style.transition = '0.5';
+        page.style.backgroundColor = 'black'
+        page.style.color = 'white'
+
+    }
+
+    else {
+
+        page.style.transition = '0.5';
+        page.style.backgroundColor = 'white'
+        page.style.color = 'black'
+
+    }
     
 })
 
@@ -73,7 +90,11 @@ function clearAllIntervals() {
 // Use Buffer Generator, New Logic's Length is ~3990 Chars....
 
 function bufferGenerator(toBuffer) {
-    
+
+    let bufferChunkSize = 3900;
+    let bufferCount = -1;
+    let bufferArray = [];
+
     for(let i = 0; i < toBuffer.length; i+=bufferChunkSize){    
         bufferCount++;
         bufferArray[bufferCount] = toBuffer.slice(i, i+bufferChunkSize);
@@ -81,21 +102,59 @@ function bufferGenerator(toBuffer) {
     bufferCount = -1;
     return bufferArray;
 }
-function BreakLessSpeech(toSpeak){
+function Speak(toSpeak){
 
-    var myTimeout;
-    function myTimer() {
+    if(toSpeak[3991]){
 
-        window.speechSynthesis.pause();
-        window.speechSynthesis.resume();
-        myTimeout = setTimeout(myTimer, 10000);
+        let buffArr = bufferGenerator(toSpeak);
+
+        console.log(buffArr);
+
+        let index = -1; 
+
+        const Timer = setInterval(() => {
+
+            if(!speechSynthesis.speaking){
+
+                index++;
+
+                let myTimeoutLg;
+                function myTimerLg() {
+                    
+                    window.speechSynthesis.pause();
+                    window.speechSynthesis.resume();
+                    myTimeoutLg = setTimeout(myTimerLg, 10000);
+                    
+                }
+                window.speechSynthesis.cancel();
+                myTimeoutLg = setTimeout(myTimerLg, 10000);
+                
+                utt.text = buffArr[index];
+                utt.onend =  function() { clearTimeout(myTimeoutLg); }
+                window.speechSynthesis.speak(utt);
+                
+            }
+            
+        }, 0)
 
     }
-    window.speechSynthesis.cancel();
-    myTimeout = setTimeout(myTimer, 10000);
+    else{
+
+        let myTimeoutSm;
+        function myTimerSm() {
     
-    utt.text = toSpeak;
-    utt.onend =  function() { clearTimeout(myTimeout); }
-    window.speechSynthesis.speak(utt);
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+            myTimeoutSm = setTimeout(myTimerSm, 10000);
+    
+        }
+        window.speechSynthesis.cancel();
+        myTimeoutSm = setTimeout(myTimerSm, 10000);
+        
+        utt.text = toSpeak;
+        utt.onend =  function() { clearTimeout(myTimeoutSm); }
+        window.speechSynthesis.speak(utt);
+    
+    }
 
 }
