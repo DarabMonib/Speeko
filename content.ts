@@ -5,7 +5,10 @@ let page = document.body;
 
 let textData = '';
 let selectedData = '';
-let virtualInp;
+let virtualInp = {
+    value: 'Please Highlight Some Text!'
+};
+
 
     function gText(e) {
     
@@ -30,7 +33,13 @@ chrome.runtime.onMessage.addListener((message) => {
     
     else if(message.press === 'play' && message.selected == true){
         clearAllIntervals();
+
+        if(virtualInp.value === '' || virtualInp.value === ' ')
+        Speak('Please Highlight Some Text!')
+        
+        else
         Speak(virtualInp.value)
+
     }
     
     if(message.isPaused){
