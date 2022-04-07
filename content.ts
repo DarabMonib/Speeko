@@ -23,7 +23,7 @@ let virtualInp;
 
 chrome.runtime.onMessage.addListener((message) => {
     
-    if(message.press === 'play' && message.selected === undefined){
+    if(message.press === 'play' && message.selected === false){
         clearAllIntervals();
         Speak(data)
     }
@@ -33,40 +33,46 @@ chrome.runtime.onMessage.addListener((message) => {
         Speak(virtualInp.value)
     }
     
-    else if(message === 'pause'){
+    if(message.isPaused){
+        window.speechSynthesis.resume();
+    }
+
+    else if(message.isPaused === false){
+        window.speechSynthesis.pause();
+    }
+
+    if(message === 'stop'){
         window.speechSynthesis.cancel();
         clearAllIntervals();
     }
 
     if(message.pitch){
-        clearAllIntervals();
-        utt.pitch = message.pitch;
+        utt.pitch = message.pitch * 0.099 + 0.02;
+        console.log(utt.pitch);
     }
 
     if(message.rate){
-        clearAllIntervals();
-        utt.rate = message.rate;
+        utt.rate = message.rate * 0.099 + 0.02;
+        console.log(utt.rate);
     }
 
     if(message.volume){
-        clearAllIntervals();
-        utt.volume = message.volume;
+        utt.volume = message.volume * 0.050;
+        console.log(utt.volume);
     }
 
     if(message.dark === true){
-
+        chrome.storage.sync.set( { 'dark': true } )
         page.style.transition = '0.5';
-        page.style.backgroundColor = 'black'
-        page.style.color = 'white'
-
+        page.style.backgroundColor = 'black';
+        page.style.color = 'white';
     }
 
     else {
-
+        chrome.storage.sync.set( { 'dark': false } )
         page.style.transition = '0.5';
-        page.style.backgroundColor = 'white'
-        page.style.color = 'black'
-
+        page.style.backgroundColor = 'white';
+        page.style.color = 'black';
     }
     
 })
@@ -158,3 +164,22 @@ function Speak(toSpeak){
     }
 
 }
+
+
+// 1. Get the Selected Text.
+// 2. Highlight the word that we are on (Search For Synth current or something....)
+// 3. Encapsulate the current word using Js in a div with id "#Current".
+// 4. Give "#Current" a property of backgroundColor = 'yellow', and color = black/red.
+
+
+// ... Disable Text Selection... Done
+// ... When Play, PlaySel is Clicked, Disable
+        // -> Playing,
+        // -> PlaySel
+        // message...
+// ... When Pause is Clicked, Disable
+        // -> Pause
+
+// ... Change The Icon of Pause => Stop, and call it stop in code.
+// ... use speechSynthesis.pause(); for pause btn..
+// ... and speechSynthesis.cancel(); for stop btn..

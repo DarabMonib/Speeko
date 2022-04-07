@@ -35,69 +35,25 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#play{
+#play, #playSel, #pause, #stop{
 
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     font-size: 15px;
     transition: 0.2s;
     background: rgb(38, 154, 255);
     border-radius: 8px;
     margin-right: 4px;
     color: rgb(255, 255, 255);
-    box-shadow: 2px 4px 8px rgba(38, 154, 255, 0.459);
+    box-shadow: 2px 4px 8px rgba(38, 154, 255, 0.178);
 
     
 }
 
-#playSel{
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 15px;
-    transition: 0.2s;
-    background: rgb(38, 154, 255);
-    border-radius: 8px;
-    margin-right: 4px;
-    color: rgb(255, 255, 255);
-    box-shadow: 2px 4px 8px rgba(38, 154, 255, 0.459);
+#pause:hover, #play:hover, #playSel:hover, #stop:hover { 
 
-    
-}
-
-#pause{
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 15px;
-    transition: 0.2s;
-    background: rgb(38, 154, 255);
-    border-radius: 8px;
-    margin-right: 4px;
-    color: rgb(255, 255, 255);
-    box-shadow: 2px 4px 8px rgba(38, 154, 255, 0.459);
-    
-}
-
-#play:hover{
-
-    transform: scale(1.225, 1.225);
-    transition: 0.2s;
-
-}
-
-#playSel:hover{
-
-    transform: scale(1.225, 1.225);
-    transition: 0.2s;
-
-}
-
-#pause:hover{
 
     transform: scale(1.225, 1.225);
     transition: 0.2s;
@@ -110,10 +66,15 @@
 
 .margin{ margin: 10px; }
 
-#bars{
-
-    margin-top: 20px;
-
-}
+#bars{ margin-top: 20px; }
 
 .invert { filter: invert(100%); }
+
+.unselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
